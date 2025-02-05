@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace</title>
+    
+</head>
+<body>
+    <header>
+        <h1>Welcome to Jacks Tamagotchi Marketplace</h1>
+        <p>Here you can see other peoples creations and download them to your own game</p>
+    </header>
+    <main>
+        <section>
+            <h2>Upload JSON File</h2>
+            <input type="file" id="upload" accept=".json">
+            <button onclick="uploadFile()">Upload</button>
+        </section>
+
+        <section>
+            <h2>Download JSON File</h2>
+            <button onclick="downloadFile()">Download</button>
+        </section>
+
+        <script>
+            function uploadFile() {
+                const fileInput = document.getElementById('upload');
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const json = event.target.result;
+                        localStorage.setItem('tamagotchiData', json);
+                        alert('File uploaded and data saved to localStorage.');
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert('Please select a file to upload.');
+                }
+            }
+
+            function downloadFile() {
+                const data = localStorage.getItem('tamagotchiData');
+                if (data) {
+                    const blob = new Blob([data], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'tamagotchiData.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } else {
+                    alert('No data found in localStorage.');
+                }
+            }
+        </script>
+    </main>
+   
+</body>
+</html>
